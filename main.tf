@@ -12,7 +12,9 @@ provider "aws" {
 }
 
 module "vpc" {
-  source             = "./vpc"
-  base_cidr_block    = var.base_cidr_block
-  availability_zones = var.availability_zones
+  source = "./vpc"
+}
+
+module "s3" {
+  source = "./s3"
 }
