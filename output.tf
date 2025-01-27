@@ -84,3 +84,12 @@ output "security_group_bastion" {
 output "security_group_efsmount" {
   value = module.vpc.security_group_efsmount
 }
+
+# Instance Values
+output "appserver_instance_ids" {
+  value = module.ec2.appserver_instance_ids
+}
+
+output "bastion_instance_id" {
+  value = module.ec2.bastion_instance_id
+}

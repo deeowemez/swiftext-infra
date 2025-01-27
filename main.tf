@@ -13,12 +13,23 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
-  availability_zones = var.availability_zones
 }
 
 module "ec2" {
-  source = "./ec2"
-  availability_zones = var.availability_zones
+  source                 = "./ec2"
+  vpc_id                 = module.vpc.vpc_id
+  availability_zones     = module.vpc.availability_zones
+  private_app_subnet_ids = module.vpc.private_app_subnet_ids
+  public_subnet_ids      = module.vpc.public_subnet_ids
+  appserver_instance_ids = module.ec2.appserver_instance_ids
+}
+
+module "alb" {
+  source                 = "./alb"
+  vpc_id                 = module.vpc.vpc_id
+  appserver_instance_ids = module.ec2.appserver_instance_ids
+  public_subnet_ids      = module.vpc.public_subnet_ids
+  alb_sg_id              = module.vpc.security_group_alb
 }
 
 module "s3" {

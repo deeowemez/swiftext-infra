@@ -3,6 +3,11 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
+output "availability_zones" {
+  description = "A list of availability zones for the subnets"
+  value = var.availability_zones
+}
+
 output "public_subnet_ids" {
   description = "The IDs of the created subnets"
   value       = aws_subnet.public[*].id

@@ -12,5 +12,5 @@ variable "base_cidr_block" {
 variable "availability_zones" {
   description = "A list of availability zones for the subnets"
   type        = list(string)
-  default     = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  default     = ["ap-southeast-1a", "ap-southeast-1b"]
 }
