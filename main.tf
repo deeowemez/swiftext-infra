@@ -13,6 +13,12 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
+  availability_zones = var.availability_zones
+}
+
+module "ec2" {
+  source = "./ec2"
+  availability_zones = var.availability_zones
 }
 
 module "s3" {
