@@ -43,13 +43,13 @@ output "public_subnet_route_table_associations" {
 output "private_appserver_subnet_route_table_associations" {
   description = "Mapping of appserver subnets to their associated route tables"
   value = { for idx, subnet_id in aws_subnet.private_app[*].id :
-    subnet_id => aws_route_table.appserver[idx].id }
+  subnet_id => aws_route_table.appserver[idx].id }
 }
 
 output "private_dataserver_subnet_route_table_associations" {
   description = "Mapping of dataserver subnets to their associated route tables"
   value = { for idx, subnet_id in aws_subnet.private_data[*].id :
-    subnet_id => aws_vpc.main.default_route_table_id }
+  subnet_id => aws_vpc.main.default_route_table_id }
 }
 
 output "aws_vpc_endpoint_dynamo_id" {
@@ -60,5 +60,30 @@ output "aws_vpc_endpoint_dynamo_id" {
 output "aws_vpc_endpoint_dynamo_route_table_associations" {
   description = "Mapping of vpc endpoints to their associated route tables"
   value = { for idx, route_table_id in aws_route_table.appserver[*].id :
-    route_table_id => aws_vpc_endpoint.dynamo.id }
+  route_table_id => aws_vpc_endpoint.dynamo.id }
+}
+
+output "security_group_alb" {
+  description = "alb-sg ID"
+  value       = aws_security_group.alb_sg.id
+}
+
+output "security_group_appserver" {
+  description = "appserver-sg ID"
+  value       = aws_security_group.appserver_sg.id
+}
+
+output "security_group_dataserver" {
+  description = "dataserver-sg ID"
+  value       = aws_security_group.dataserver_sg.id
+}
+
+output "security_group_efsmount" {
+  description = "efsmount-sg ID"
+  value       = aws_security_group.efsmount_sg.id
+}
+
+output "security_group_bastion" {
+  description = "bastion-sg ID"
+  value       = aws_security_group.bastion_sg.id
 }

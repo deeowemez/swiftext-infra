@@ -63,3 +63,24 @@ output "website_domain" {
 output "website_endpoint" {
   value = module.s3.website_endpoint
 }
+
+# Security Group Values
+output "security_group_alb" {
+  value = module.vpc.security_group_alb
+}
+
+output "security_group_appserver" {
+  value = module.vpc.security_group_appserver
+}
+
+output "security_group_dataserver" {
+  value = module.vpc.security_group_dataserver
+}
+
+output "security_group_bastion" {
+  value = module.vpc.security_group_bastion
+}
+
+output "security_group_efsmount" {
+  value = module.vpc.security_group_efsmount
+}
