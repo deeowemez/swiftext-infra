@@ -18,6 +18,8 @@ resource "aws_instance" "appserver" {
   instance_type = var.instance_type
   subnet_id     = var.private_app_subnet_ids[count.index]
 
+  iam_instance_profile = var.iam_instance_profile.name
+
   tags = {
     Name = "appserver-${count.index}"
   }

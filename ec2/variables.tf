@@ -38,3 +38,7 @@ variable "appserver_sg_id" {
 variable "bastion_sg_id" {
   description = "The ID for the bastion host sg"
 }
+
+variable "iam_instance_profile" {
+  description = "The instance profile attached to appserver instance"
+}
