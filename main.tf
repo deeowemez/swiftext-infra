@@ -22,6 +22,8 @@ module "ec2" {
   private_app_subnet_ids = module.vpc.private_app_subnet_ids
   public_subnet_ids      = module.vpc.public_subnet_ids
   appserver_instance_ids = module.ec2.appserver_instance_ids
+  appserver_sg_id        = module.vpc.security_group_appserver
+  bastion_sg_id = module.vpc.security_group_bastion
 }
 
 module "alb" {
@@ -30,6 +32,11 @@ module "alb" {
   appserver_instance_ids = module.ec2.appserver_instance_ids
   public_subnet_ids      = module.vpc.public_subnet_ids
   alb_sg_id              = module.vpc.security_group_alb
+}
+
+module "efs" {
+  source                 = "./efs"
+  private_app_subnet_ids = module.vpc.private_app_subnet_ids
 }
 
 module "s3" {

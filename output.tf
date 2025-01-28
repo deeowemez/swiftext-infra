@@ -93,3 +93,8 @@ output "appserver_instance_ids" {
 output "bastion_instance_id" {
   value = module.ec2.bastion_instance_id
 }
+
+# ALB Values
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}

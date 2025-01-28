@@ -30,3 +30,11 @@ variable "ami" {
   description = "The ami for the appserver and dataserver"
   default = "ami-0672fd5b9210aa093"
 }
+
+variable "appserver_sg_id" {
+  description = "The ID for the appserver sg"
+}
+
+variable "bastion_sg_id" {
+  description = "The ID for the bastion host sg"
+}

@@ -152,9 +152,9 @@ resource "aws_vpc_security_group_egress_rule" "allow_psql_to_dataserver" {
 resource "aws_vpc_security_group_egress_rule" "allow_nfs_to_efs_mount" {
   security_group_id            = aws_security_group.appserver_sg.id
   referenced_security_group_id = aws_security_group.efsmount_sg.id
-  from_port                    = 0
-  ip_protocol                  = "-1"
-  to_port                      = 65535
+  from_port                    = 2049
+  ip_protocol                  = "tcp"
+  to_port                      = 2049
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_http_to_dynamo_endpoint" {

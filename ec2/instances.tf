@@ -1,4 +1,17 @@
 # Application Server and Bastion Host Instance Creation
+resource "aws_network_interface" "appserver" {
+  depends_on      = [aws_instance.appserver]
+  count           = length(var.appserver_instance_ids)
+  subnet_id       = var.private_app_subnet_ids[count.index]
+  security_groups = [var.appserver_sg_id]
+}
+
+resource "aws_network_interface" "bastion_host" {
+  depends_on      = [aws_instance.bastion_host]
+  subnet_id       = var.public_subnet_ids[0]
+  security_groups = [var.bastion_sg_id]
+}
+
 resource "aws_instance" "appserver" {
   count         = length(var.private_app_subnet_ids)
   ami           = var.ami
@@ -18,4 +31,17 @@ resource "aws_instance" "bastion_host" {
   tags = {
     Name = "bastion-host"
   }
+}
+
+resource "aws_network_interface_sg_attachment" "appserver_sg_attahcment" {
+  depends_on           = [aws_instance.appserver]
+  count                = length(var.appserver_instance_ids)
+  security_group_id    = var.appserver_sg_id
+  network_interface_id = aws_instance.appserver[count.index].primary_network_interface_id
+}
+
+resource "aws_network_interface_sg_attachment" "bastio_sg_attahcment" {
+  depends_on           = [aws_instance.bastion_host]
+  security_group_id    = var.bastion_sg_id
+  network_interface_id = aws_instance.bastion_host.primary_network_interface_id
 }
