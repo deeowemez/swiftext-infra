@@ -19,6 +19,7 @@ resource "aws_instance" "appserver" {
   subnet_id     = var.private_app_subnet_ids[count.index]
 
   iam_instance_profile = var.iam_instance_profile.name
+  key_name             = aws_key_pair.appserver_key.key_name
 
   tags = {
     Name = "appserver-${count.index}"
@@ -29,6 +30,8 @@ resource "aws_instance" "bastion_host" {
   ami           = var.ami
   instance_type = var.instance_type
   subnet_id     = var.public_subnet_ids[0]
+
+  key_name = aws_key_pair.bastion_key.key_name
 
   tags = {
     Name = "bastion-host"

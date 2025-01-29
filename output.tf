@@ -98,3 +98,14 @@ output "bastion_instance_id" {
 output "alb_dns_name" {
   value = module.alb.alb_dns_name
 }
+
+# Key Pair Values
+output "bastion_private_key_pem" {
+  value     = module.ec2.bastion_private_key_pem
+  sensitive = true
+}
+
+output "appserver_private_key_pem" {
+  value     = module.ec2.appserver_private_key_pem
+  sensitive = true
+}

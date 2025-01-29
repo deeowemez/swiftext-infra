@@ -1,0 +1,6 @@
+To save the private key on local machine:
+    echo "$(terraform output -raw bastion_private_key_pem)" > bastion-key.pem
+    echo "$(terraform output -raw appserver_private_key_pem)" > appserver-key.pem
+
+Edit aws credentials:
+    sudo nano ~/.aws/credentials

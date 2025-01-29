@@ -44,6 +44,13 @@ module "iam" {
   source = "./iam"
 }
 
+module "rds" {
+  source                    = "./rds"
+  private_app_subnet_ids    = module.vpc.private_app_subnet_ids
+  security_group_dataserver = module.vpc.security_group_dataserver
+  availability_zones        = module.vpc.availability_zones
+}
+
 module "s3" {
   source = "./s3"
 }
