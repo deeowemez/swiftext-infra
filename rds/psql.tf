@@ -1,13 +1,14 @@
 resource "postgresql_role" "swiftext" {
-  name            = "test"
+  name            = var.postgresql_role_name
   login           = true
-  password        = "test"
+  password        = var.postgresql_role_name
   superuser       = true
   create_database = true
   create_role     = true
 }
 
 resource "postgresql_database" "file_uploads_db" {
+  provider          = postgresql
   name              = "file_uploads"
   owner             = "swiftext"
   template          = "template0"

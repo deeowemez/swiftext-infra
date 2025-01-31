@@ -33,6 +33,8 @@ module "rds" {
   private_app_subnet_ids    = module.vpc.private_app_subnet_ids
   security_group_dataserver = module.vpc.security_group_dataserver
   availability_zones        = module.vpc.availability_zones
+  postgresql_role_name      = var.postgresql_role_name
+  postgresql_role_password  = var.postgresql_role_password
 }
 
 module "s3" {

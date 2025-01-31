@@ -17,8 +17,8 @@ provider "aws" {
 
 provider "postgresql" {
   host     = module.rds.rds_instance_address
-  port     = 5432
   username = module.rds.rds_instance_username
-  password = module.rds.rds_instance_password
-  sslmode  = "disable"
+  password = module.rds.rds_instance_username
+  database = "file_uploads"
+  port     = 5432
 }
