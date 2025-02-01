@@ -25,6 +25,7 @@ module "alb" {
 module "efs" {
   source                 = "./efs"
   private_app_subnet_ids = module.vpc.private_app_subnet_ids
+  efsmount_sg_id         = module.vpc.security_group_efsmount
 }
 
 
@@ -37,9 +38,9 @@ module "rds" {
   postgresql_role_password  = var.postgresql_role_password
 }
 
-module "s3" {
-  source = "./s3"
-}
+# module "s3" {
+#   source = "./s3"
+# }
 
 # module "iam" {
 #   source = "./iam"

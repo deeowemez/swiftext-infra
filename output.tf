@@ -48,21 +48,21 @@ output "aws_vpc_endpoint_dynamo_route_table_associations" {
 }
 
 # S3 Bucket Output Values
-output "s3_bucket_name" {
-  value = module.s3.s3_bucket_name
-}
+# output "s3_bucket_name" {
+#   value = module.s3.s3_bucket_name
+# }
 
-output "s3_bucket_domain_name" {
-  value = module.s3.s3_bucket_domain_name
-}
+# output "s3_bucket_domain_name" {
+#   value = module.s3.s3_bucket_domain_name
+# }
 
-output "website_domain" {
-  value = module.s3.website_domain
-}
+# output "website_domain" {
+#   value = module.s3.website_domain
+# }
 
-output "website_endpoint" {
-  value = module.s3.website_endpoint
-}
+# output "website_endpoint" {
+#   value = module.s3.website_endpoint
+# }
 
 # Security Group Values
 output "security_group_alb" {
@@ -108,4 +108,13 @@ output "bastion_private_key_pem" {
 output "appserver_private_key_pem" {
   value     = module.ec2.appserver_private_key_pem
   sensitive = true
+}
+
+# RDS Instance Values
+output "rds_instance_domain" {
+  value = module.rds.rds_instance_domain
+}
+
+output "rds_instance_address" {
+  value = module.rds.rds_instance_address
 }

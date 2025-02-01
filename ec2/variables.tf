@@ -28,7 +28,8 @@ variable "instance_type" {
 
 variable "ami" {
   description = "The ami for the appserver and dataserver"
-  default = "ami-0672fd5b9210aa093"
+  # default = "ami-0672fd5b9210aa093"
+  default = "ami-0277ea6d87dd09cd4"
 }
 
 variable "appserver_sg_id" {
