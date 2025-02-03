@@ -11,7 +11,9 @@ module "ec2" {
   appserver_instance_ids = module.ec2.appserver_instance_ids
   appserver_sg_id        = module.vpc.security_group_appserver
   bastion_sg_id          = module.vpc.security_group_bastion
+  efs_id                 = module.efs.aws_efs_file_system_id
   # iam_instance_profile   = module.iam.iam_instance_profile
+  depends_on = [module.efs, module.rds]
 }
 
 module "alb" {
@@ -20,6 +22,7 @@ module "alb" {
   appserver_instance_ids = module.ec2.appserver_instance_ids
   public_subnet_ids      = module.vpc.public_subnet_ids
   alb_sg_id              = module.vpc.security_group_alb
+  depends_on             = [module.ec2]
 }
 
 module "efs" {

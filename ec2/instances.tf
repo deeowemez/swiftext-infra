@@ -12,6 +12,10 @@ resource "aws_network_interface" "bastion_host" {
   security_groups = [var.bastion_sg_id]
 }
 
+locals {
+  efs_id = var.efs_id
+}
+
 resource "aws_instance" "appserver" {
   count         = length(var.private_app_subnet_ids)
   ami           = var.ami
@@ -19,7 +23,13 @@ resource "aws_instance" "appserver" {
   subnet_id     = var.private_app_subnet_ids[count.index]
 
   # iam_instance_profile = var.iam_instance_profile.name
-  key_name             = aws_key_pair.appserver_key.key_name
+  key_name = aws_key_pair.appserver_key.key_name
+
+  user_data_base64 = base64encode(templatefile("ec2/user-data.sh", {
+    efs_id = local.efs_id
+  }))
+
+  user_data_replace_on_change = true
 
   tags = {
     Name = "appserver-${count.index}"
