@@ -111,10 +111,6 @@ output "appserver_private_key_pem" {
 }
 
 # RDS Instance Values
-# output "rds_instance_domain" {
-#   value = module.rds.rds_instance_domain
-# }
-
-# output "rds_instance_address" {
-#   value = module.rds.rds_instance_address
-# }
+output "rds_instance_endpoint" {
+  value = module.rds.rds_instance_endpoint
+}

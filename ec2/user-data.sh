@@ -85,3 +85,23 @@ else
     echo "EFS already mounted." | sudo tee -a $LOG_FILE
 fi
 
+# Connect to RDS
+export PGPASSWORD="postgres"
+echo "Connecting to RDS Domain: ${rds_instance_domain}" | sudo tee -a $LOG_FILE
+echo "Create role and db" | sudo tee -a $LOG_FILE
+
+psql -h ${rds_instance_domain} -U postgres -d postgres -p 5432 \
+    -c "CREATE ROLE swiftext WITH LOGIN PASSWORD 'swiftext';" \
+    -c "GRANT rds_superuser TO swiftext;" \
+    -c "CREATE DATABASE swiftext;" \
+    -c "CREATE DATABASE file_uploads;" 2>&1 | sudo tee -a $LOG_FILE
+
+export PGPASSWORD="swiftext"
+psql -h ${rds_instance_domain} -U swiftext -d file_uploads -p 5432 \
+    -c "GRANT ALL PRIVILEGES ON DATABASE swiftext TO swiftext" \
+    -c "GRANT ALL PRIVILEGES ON DATABASE file_uploads TO swiftext" 2>&1 | sudo tee -a $LOG_FILE
+
+echo "Testing connection through new role" | sudo tee -a $LOG_FILE
+psql -h ${rds_instance_domain} -U swiftext -d file_uploads -p 5432 2>&1 | sudo tee -a $LOG_FILE
+psql -h ${rds_instance_domain} -U swiftext -d file_uploads -p 5432 \
+    -c "\dt" 2>&1 | sudo tee -a $LOG_FILE

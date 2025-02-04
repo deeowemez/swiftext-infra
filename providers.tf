@@ -19,6 +19,7 @@ provider "postgresql" {
   host     = module.rds.rds_instance_address
   username = module.rds.rds_instance_username
   password = module.rds.rds_instance_username
-  database = "file_uploads"
+  database = "postgres"
   port     = 5432
+  sslmode  = "require"
 }

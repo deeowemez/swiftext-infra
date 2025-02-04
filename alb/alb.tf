@@ -7,12 +7,6 @@ resource "aws_lb" "alb" {
 
   enable_deletion_protection = false
 
-  # access_logs {
-  #   bucket  = aws_s3_bucket.lb_logs.id
-  #   prefix  = "test-lb"
-  #   enabled = true
-  # }
-
   tags = {
     Name = "swiftext-alb"
   }
@@ -43,6 +37,8 @@ resource "aws_lb_target_group" "appserver" {
   tags = {
     Name = "appserver-target-group"
   }
+
+  depends_on = [var.vpc_id]
 }
 
 resource "aws_lb_target_group_attachment" "appserver" {
@@ -50,4 +46,5 @@ resource "aws_lb_target_group_attachment" "appserver" {
   target_group_arn = aws_lb_target_group.appserver.arn
   target_id        = var.appserver_instance_ids[count.index]
   port             = 80
+  depends_on       = [aws_lb_target_group.appserver]
 }

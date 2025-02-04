@@ -11,3 +11,6 @@ tfplan
 # Ignore key-pair files
 bastion-key.pem
 appserver-key.pem
+
+# Ignore test files
+user-data-test.sh

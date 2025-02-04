@@ -23,13 +23,12 @@ variable "public_subnet_ids" {
 
 variable "instance_type" {
   description = "The instance type for the appserver and dataserver"
-  default = "t2.micro"
+  default     = "t2.micro"
 }
 
 variable "ami" {
-  description = "The ami for the appserver and dataserver"
-  default = "ami-0672fd5b9210aa093"
-  # default = "ami-0ee50919033a8d8eb"
+  description = "The ami for the appserver and dataserver, quick ami: ubuntu"
+  default     = "ami-0672fd5b9210aa093"
 }
 
 variable "appserver_sg_id" {
@@ -46,5 +45,9 @@ variable "efs_id" {
 
 variable "iam_instance_profile_arn" {
   description = "The instance profile attached to appserver instance"
-  default = "LabInstanceProfile"
+  default     = "LabInstanceProfile"
+}
+
+variable "rds_instance_endpoint" {
+  default = "The endpoint of the rds"
 }

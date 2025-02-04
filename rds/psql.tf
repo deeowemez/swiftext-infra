@@ -8,7 +8,6 @@
 # }
 
 # resource "postgresql_database" "file_uploads_db" {
-#   provider          = postgresql
 #   name              = "file_uploads"
 #   owner             = "swiftext"
 #   template          = "template0"

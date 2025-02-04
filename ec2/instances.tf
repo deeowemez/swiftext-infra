@@ -13,7 +13,8 @@ resource "aws_network_interface" "bastion_host" {
 }
 
 locals {
-  efs_id = var.efs_id
+  efs_id              = var.efs_id
+  rds_instance_domain = replace(var.rds_instance_endpoint, ":5432", "")
 }
 
 resource "aws_instance" "appserver" {
@@ -23,11 +24,13 @@ resource "aws_instance" "appserver" {
   subnet_id     = var.private_app_subnet_ids[count.index]
 
   iam_instance_profile = var.iam_instance_profile_arn
-  key_name = aws_key_pair.appserver_key.key_name
+  key_name             = aws_key_pair.appserver_key.key_name
 
   user_data_base64 = base64encode(templatefile("ec2/user-data.sh", {
-    efs_id = local.efs_id
+    efs_id              = local.efs_id
+    rds_instance_domain = local.rds_instance_domain
   }))
+
 
   user_data_replace_on_change = true
 
