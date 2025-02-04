@@ -22,7 +22,7 @@ resource "aws_instance" "appserver" {
   instance_type = var.instance_type
   subnet_id     = var.private_app_subnet_ids[count.index]
 
-  # iam_instance_profile = var.iam_instance_profile.name
+  iam_instance_profile = var.iam_instance_profile_arn
   key_name = aws_key_pair.appserver_key.key_name
 
   user_data_base64 = base64encode(templatefile("ec2/user-data.sh", {
@@ -48,12 +48,12 @@ resource "aws_instance" "bastion_host" {
   }
 }
 
-# resource "aws_network_interface_sg_attachment" "appserver_sg_attahcment" {
-#   depends_on           = [aws_instance.appserver]
-#   count                = length(var.appserver_instance_ids)
-#   security_group_id    = var.appserver_sg_id
-#   network_interface_id = aws_instance.appserver[count.index].primary_network_interface_id
-# }
+resource "aws_network_interface_sg_attachment" "appserver_sg_attahcment" {
+  depends_on           = [aws_instance.appserver]
+  count                = length(var.appserver_instance_ids)
+  security_group_id    = var.appserver_sg_id
+  network_interface_id = aws_instance.appserver[count.index].primary_network_interface_id
+}
 
 resource "aws_network_interface_sg_attachment" "bastion_sg_attahcment" {
   depends_on           = [aws_instance.bastion_host]

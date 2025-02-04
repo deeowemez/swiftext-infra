@@ -56,12 +56,12 @@ sudo apt-get update && sudo apt-get -y install git binutils 2>&1 | sudo tee -a $
 git clone https://github.com/aws/efs-utils /home/ubuntu/efs-utils 2>&1 | sudo tee -a $LOG_FILE
 echo "Building efs-utils from source repo…" | sudo tee -a $LOG_FILE
 cd /home/ubuntu/efs-utils
-sudo ./build-deb.sh 2>&1 | sudo tee -a $LOG_FILE
+./build-deb.sh 2>&1 | sudo tee -a $LOG_FILE
 sudo apt-get -y install ./build/amazon-efs-utils*deb 2>&1 | sudo tee -a $LOG_FILE
 
 echo "Granting permission to build file…" | sudo tee -a $LOG_FILE
 sudo chmod 644 /home/ubuntu/efs-utils/build/amazon-efs-utils-2.2.0-1_amd64.deb
-sudo ./build-deb.sh | sudo tee -a $LOG_FILE
+./build-deb.sh | sudo tee -a $LOG_FILE
 sudo apt-get -y install ./build/amazon-efs-utils*deb | sudo tee -a $LOG_FILE
 
 # Creating EFS dir and setting permissions
@@ -84,3 +84,4 @@ if ! grep -qs "${efs_id}" /proc/mounts; then
 else
     echo "EFS already mounted." | sudo tee -a $LOG_FILE
 fi
+

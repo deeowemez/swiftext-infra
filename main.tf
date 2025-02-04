@@ -13,7 +13,7 @@ module "ec2" {
   bastion_sg_id          = module.vpc.security_group_bastion
   efs_id                 = module.efs.aws_efs_file_system_id
   # iam_instance_profile   = module.iam.iam_instance_profile
-  depends_on = [module.efs, module.rds]
+  depends_on = [module.efs]
 }
 
 module "alb" {
@@ -32,14 +32,14 @@ module "efs" {
 }
 
 
-module "rds" {
-  source                    = "./rds"
-  private_app_subnet_ids    = module.vpc.private_app_subnet_ids
-  security_group_dataserver = module.vpc.security_group_dataserver
-  availability_zones        = module.vpc.availability_zones
-  postgresql_role_name      = var.postgresql_role_name
-  postgresql_role_password  = var.postgresql_role_password
-}
+# module "rds" {
+#   source                    = "./rds"
+#   private_app_subnet_ids    = module.vpc.private_app_subnet_ids
+#   security_group_dataserver = module.vpc.security_group_dataserver
+#   availability_zones        = module.vpc.availability_zones
+#   postgresql_role_name      = var.postgresql_role_name
+#   postgresql_role_password  = var.postgresql_role_password
+# }
 
 # module "s3" {
 #   source = "./s3"
