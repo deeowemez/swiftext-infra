@@ -13,6 +13,8 @@ module "ec2" {
   bastion_sg_id          = module.vpc.security_group_bastion
   efs_id                 = module.efs.aws_efs_file_system_id
   rds_instance_endpoint  = module.rds.rds_instance_endpoint
+  git_username           = var.git_username
+  git_pat                = var.git_pat
   depends_on             = [module.efs, module.rds]
   # depends_on            = [module.rds]
 }

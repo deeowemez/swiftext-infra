@@ -51,3 +51,11 @@ variable "iam_instance_profile_arn" {
 variable "rds_instance_endpoint" {
   default = "The endpoint of the rds"
 }
+
+variable "git_username" {
+  description = "Username in Git"
+}
+
+variable "git_pat" {
+  description = "Pat in Git account"
+}

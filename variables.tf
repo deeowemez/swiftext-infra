@@ -14,3 +14,11 @@ variable "aws_region" {
 #   type        = string
 #   sensitive   = true
 # }
+
+variable "git_username" {
+  description = "Username in Git"
+}
+
+variable "git_pat" {
+  description = "Pat in Git account"
+}

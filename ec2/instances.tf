@@ -15,6 +15,8 @@ resource "aws_network_interface" "bastion_host" {
 locals {
   efs_id              = var.efs_id
   rds_instance_domain = replace(var.rds_instance_endpoint, ":5432", "")
+  git_username        = var.git_username
+  git_pat             = var.git_pat
 }
 
 resource "aws_instance" "appserver" {
@@ -29,6 +31,8 @@ resource "aws_instance" "appserver" {
   user_data_base64 = base64encode(templatefile("ec2/user-data.sh", {
     efs_id              = local.efs_id
     rds_instance_domain = local.rds_instance_domain
+    git_username        = local.git_username
+    git_pat             = local.git_pat
   }))
 
 
