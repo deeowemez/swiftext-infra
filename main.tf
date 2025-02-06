@@ -15,6 +15,7 @@ module "ec2" {
   rds_instance_endpoint  = module.rds.rds_instance_endpoint
   git_username           = var.git_username
   git_pat                = var.git_pat
+  db_password            = var.db_password
   depends_on             = [module.efs, module.rds]
   # depends_on            = [module.rds]
 }

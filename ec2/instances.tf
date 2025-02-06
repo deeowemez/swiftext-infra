@@ -17,6 +17,7 @@ locals {
   rds_instance_domain = replace(var.rds_instance_endpoint, ":5432", "")
   git_username        = var.git_username
   git_pat             = var.git_pat
+  db_password         = var.db_password
 }
 
 resource "aws_instance" "appserver" {
@@ -33,6 +34,7 @@ resource "aws_instance" "appserver" {
     rds_instance_domain = local.rds_instance_domain
     git_username        = local.git_username
     git_pat             = local.git_pat
+    db_password         = local.db_password
   }))
 
 

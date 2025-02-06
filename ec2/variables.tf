@@ -59,3 +59,7 @@ variable "git_username" {
 variable "git_pat" {
   description = "Pat in Git account"
 }
+
+variable "db_password" {
+  description = "Password for psql role"
+}
