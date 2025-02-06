@@ -12,6 +12,7 @@ export RDS_INSTANCE_DOMAIN=${rds_instance_domain}
 export GIT_USERNAME=${git_username}
 export GIT_PAT=${git_pat}
 export DB_PASSWORD=${db_password}
+export JWT_SECRET=${jwt_secret}
 
 
 # Download NodeJS
@@ -74,8 +75,8 @@ EFS_DIR="/home/ubuntu/efs"
 echo "Creating EFS dir and changing ownership to ubuntu…" | sudo tee -a $USER_DATA_LOG_FILE
 cd ..
 sudo mkdir -p $EFS_DIR
-sudo chmod 775 $EFS_DIR
-sudo chown ubuntu:ubuntu $EFS_DIR
+sudo chown -R ubuntu:ubuntu $EFS_DIR
+sudo chmod -R 755 $EFS_DIR
 
 # Mount EFS
 echo "Mounting EFS (${efs_id}) to $EFS_DIR…" | sudo tee -a $USER_DATA_LOG_FILE
@@ -142,20 +143,22 @@ npm install libreoffice-convert
 npm install jwt-decode@3.1.2 | sudo tee -a $SETUP_REPO_LOG_FILE
 npm install -g nodemon
 npm install -g pm2
+npm install dotenv
 
 echo "Libreoffice version: $(libreoffice --version)" | sudo tee -a $SETUP_REPO_LOG_FILE
 echo "JWT Decode version: $(npm list jwt-decode | grep jwt-decode)" | sudo tee -a $SETUP_REPO_LOG_FILE
 echo "Nodemon version: $(nodemon --version)" | sudo tee -a $SETUP_REPO_LOG_FILE
 echo "pm2 version: $(pm2 --version)" | sudo tee -a $SETUP_REPO_LOG_FILE
+echo "dotenv version: $(npm list dotenv)" | sudo tee -a $SETUP_REPO_LOG_FILE
 EOF
 
-# Create a setup-env.sh
-echo "Creating setup-env.sh file" | sudo tee -a $USER_DATA_LOG_FILE
+# Create a setup-db-env.sh
+echo "Creating setup-db-env.sh file" | sudo tee -a $USER_DATA_LOG_FILE
 
 export SETUP_TABLES_LOG_FILE="/var/log/setup-tables.log"
-echo "Setting up env file..." | sudo tee -a $SETUP_TABLES_LOG_FILE
+echo "Setting up db env file..." | sudo tee -a $SETUP_TABLES_LOG_FILE
 
-cat <<EOF | sudo tee /home/ubuntu/setup-env.sh >/dev/null
+cat <<EOF | sudo tee /home/ubuntu/setup-db-env.sh >/dev/null
 #!/bin/bash
 
 # Environment configuration for PostgreSQL and AWS
@@ -172,6 +175,37 @@ AWS_REGION=ap-southeast-1
 CONFIG
 
 echo "Environment file created at /home/ubuntu/swiftext/db/.env"
+EOF
+
+# Create a setup-app-env.sh
+echo "Creating setup-app-env.sh file" | sudo tee -a $USER_DATA_LOG_FILE
+
+echo "Setting up app env file..." | sudo tee -a $SETUP_TABLES_LOG_FILE
+
+cat <<EOF | sudo tee /home/ubuntu/setup-app-env.sh >/dev/null
+#!/bin/bash
+
+# Environment configuration for PostgreSQL and AWS
+cat << CONFIG > /home/ubuntu/swiftext/backend/.env
+# PSQL CREDS
+DB_USER=swiftext
+DB_HOST=$RDS_INSTANCE_DOMAIN
+DB_NAME=file_uploads
+DB_PASSWORD=$DB_PASSWORD
+DB_PORT=5432
+
+# JWT SECRET
+JWT_SECRET=$JWT_SECRET
+
+# AWS CREDS
+AWS_REGION=ap-southeast-1
+
+
+# STORAGE
+STORAGE_PATH=/home/ubuntu/efs
+CONFIG
+
+echo "Environment file created at /home/ubuntu/swiftext/backend/.env"
 EOF
 
 # Create a setup-tables.sh
@@ -198,16 +232,17 @@ node /home/ubuntu/swiftext/db/dynamo.js 2>&1 | sudo tee -a $SETUP_TABLES_LOG_FIL
 
 echo "Setting up PSQL tables..." | sudo tee -a $SETUP_TABLES_LOG_FILE
 node /home/ubuntu/swiftext/db/psql.js 2>&1 | sudo tee -a $SETUP_TABLES_LOG_FILE
-
 EOF
 
 # Make scripts executable
 echo "Setting permissions on setup files" | sudo tee -a $USER_DATA_LOG_FILE
 sudo chmod +x /home/ubuntu/setup-repo.sh
-sudo chmod +x /home/ubuntu/setup-env.sh
+sudo chmod +x /home/ubuntu/setup-db-env.sh
+sudo chmod +x /home/ubuntu/setup-app-env.sh
 sudo chmod +x /home/ubuntu/setup-tables.sh
 echo "setup-repo permissions: $(ls -l /home/ubuntu/setup-repo.sh)" | sudo tee -a $USER_DATA_LOG_FILE
-echo "setup-env permissions: $(ls -l /home/ubuntu/setup-env.sh)" | sudo tee -a $USER_DATA_LOG_FILE
+echo "setup-db-env permissions: $(ls -l /home/ubuntu/setup-db-env.sh)" | sudo tee -a $USER_DATA_LOG_FILE
+echo "setup-app-env permissions: $(ls -l /home/ubuntu/setup-app-env.sh)" | sudo tee -a $USER_DATA_LOG_FILE
 echo "setup-tables permissions: $(ls -l /home/ubuntu/setup-tables.sh)" | sudo tee -a $USER_DATA_LOG_FILE
 
 # Create a setup-app.sh

@@ -18,6 +18,7 @@ locals {
   git_username        = var.git_username
   git_pat             = var.git_pat
   db_password         = var.db_password
+  jwt_secret          = var.jwt_secret
 }
 
 resource "aws_instance" "appserver" {
@@ -35,6 +36,7 @@ resource "aws_instance" "appserver" {
     git_username        = local.git_username
     git_pat             = local.git_pat
     db_password         = local.db_password
+    jwt_secret          = local.jwt_secret
   }))
 
 

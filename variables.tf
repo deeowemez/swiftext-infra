@@ -26,3 +26,7 @@ variable "git_pat" {
 variable "db_password" {
   description = "Password for psql rds role"
 }
+
+variable "jwt_secret" {
+  description = "jwt token"
+}

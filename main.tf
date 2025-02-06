@@ -16,6 +16,7 @@ module "ec2" {
   git_username           = var.git_username
   git_pat                = var.git_pat
   db_password            = var.db_password
+  jwt_secret             = var.jwt_secret
   depends_on             = [module.efs, module.rds]
   # depends_on            = [module.rds]
 }
