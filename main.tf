@@ -43,9 +43,9 @@ module "rds" {
   availability_zones        = module.vpc.availability_zones
 }
 
-# module "s3" {
-#   source = "./s3"
-# }
+module "s3" {
+  source = "./s3"
+}
 
 # module "iam" {
 #   source = "./iam"

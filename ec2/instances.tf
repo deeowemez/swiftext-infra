@@ -26,9 +26,11 @@ resource "aws_instance" "appserver" {
   ami           = var.ami
   instance_type = var.instance_type
   subnet_id     = var.private_app_subnet_ids[count.index]
+  
 
   iam_instance_profile = var.iam_instance_profile_arn
   key_name             = aws_key_pair.appserver_key.key_name
+  associate_public_ip_address = false
 
   user_data_base64 = base64encode(templatefile("ec2/user-data.sh", {
     efs_id              = local.efs_id

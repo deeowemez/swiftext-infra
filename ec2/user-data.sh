@@ -13,6 +13,7 @@ export GIT_USERNAME=${git_username}
 export GIT_PAT=${git_pat}
 export DB_PASSWORD=${db_password}
 export JWT_SECRET=${jwt_secret}
+export EFS_DIR=/home/ubuntu/efs
 
 
 # Download NodeJS
@@ -69,14 +70,6 @@ echo "Granting permission to build file…" | sudo tee -a $USER_DATA_LOG_FILE
 sudo chmod 644 /home/ubuntu/efs-utils/build/amazon-efs-utils-2.2.0-1_amd64.deb
 ./build-deb.sh | sudo tee -a $USER_DATA_LOG_FILE
 sudo apt-get -y install ./build/amazon-efs-utils*deb | sudo tee -a $USER_DATA_LOG_FILE
-
-# Creating EFS dir and setting permissions
-EFS_DIR="/home/ubuntu/efs"
-echo "Creating EFS dir and changing ownership to ubuntu…" | sudo tee -a $USER_DATA_LOG_FILE
-cd ..
-sudo mkdir -p $EFS_DIR
-sudo chown -R ubuntu:ubuntu $EFS_DIR
-sudo chmod -R 755 $EFS_DIR
 
 # Mount EFS
 echo "Mounting EFS (${efs_id}) to $EFS_DIR…" | sudo tee -a $USER_DATA_LOG_FILE
@@ -150,6 +143,13 @@ echo "JWT Decode version: $(npm list jwt-decode | grep jwt-decode)" | sudo tee -
 echo "Nodemon version: $(nodemon --version)" | sudo tee -a $SETUP_REPO_LOG_FILE
 echo "pm2 version: $(pm2 --version)" | sudo tee -a $SETUP_REPO_LOG_FILE
 echo "dotenv version: $(npm list dotenv)" | sudo tee -a $SETUP_REPO_LOG_FILE
+
+# Creating EFS dir and setting permissions
+echo "Creating EFS dir and changing ownership to ubuntu…" | sudo tee -a $USER_DATA_LOG_FILE
+cd /home/ubuntu/
+sudo mkdir -p $EFS_DIR
+sudo chown -R ubuntu:ubuntu $EFS_DIR
+sudo chmod -R 755 $EFS_DIR
 EOF
 
 # Create a setup-db-env.sh
@@ -256,10 +256,20 @@ cat <<EOF | sudo tee /home/ubuntu/setup-app.sh >/dev/null
 
 echo "Running setup-repo.sh..." | sudo tee -a $SETUP_APP_LOG_FILE
 bash /home/ubuntu/setup-repo.sh 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
-echo "Running setup-env.sh..." | sudo tee -a $SETUP_APP_LOG_FILE
-bash /home/ubuntu/setup-env.sh 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
+echo "Running setup-db-env.sh..." | sudo tee -a $SETUP_APP_LOG_FILE
+bash /home/ubuntu/setup-db-env.sh 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
+echo "Running setup-app-env.sh..." | sudo tee -a $SETUP_APP_LOG_FILE
+bash /home/ubuntu/setup-app-env.sh 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
 echo "Running setup-tables.sh..." | sudo tee -a $SETUP_APP_LOG_FILE
 bash /home/ubuntu/setup-tables.sh 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
+
+# Start the application using PM2
+echo "Starting the application with PM2..." | sudo tee -a $SETUP_APP_LOG_FILE
+cd /home/ubuntu/swiftext/backend
+pm2 start index.js --name swiftext-app --watch 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
+
+# Save the PM2 process list so it restarts after reboot
+pm2 save 2>&1 | sudo tee -a $SETUP_APP_LOG_FILE
 EOF
 
 sudo chmod +x /home/ubuntu/setup-app.sh
