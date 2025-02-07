@@ -5,6 +5,3 @@ To save the private key on local machine:
 Edit aws credentials:
     sudo nano ~/.aws/credentials
     rm ~/.aws/credentials
-
-Re-Initialize Terraform
-    terraform init -reconfigure
