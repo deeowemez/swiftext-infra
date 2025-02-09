@@ -66,3 +66,11 @@ The following AWS services were utilized in this project:
 - **Amazon Application Load Balancer**
 - **VPC endpoints**
 - **Mount Targets**
+
+
+## In Progress
+- Continuous Integration (CI) and Continuous Deployment (CD) Integration (Github Actions)
+   - Add pipeline to automatically trigger Terraform plans and Terraform apply whenever changes are pushed to the repository
+     - Terraform Validation: GitHub Actions will run Terraform validation checks to ensure that infrastructure code is clean
+     - Terraform Plan: Automatically generate and review a Terraform plan on each pull request to preview infrastructure changes before they are applied
+     - Terraform Apply: On merge to the main branch, GitHub Actions will automatically apply the changes to the infrastructure
